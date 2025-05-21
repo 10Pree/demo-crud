@@ -41,20 +41,20 @@ app.post("/user", async (req, res) => {
     }
 })
 
-app.put('/user/:id', async(req, res) => {
+app.put('/user/:id', async (req, res) => {
     try {
         const userId = req.params.id
         const { username, password, email, phone, address } = req.body
 
         const [checkUser] = await conn.query("SELECT * FROM users WHERE id = ?", userId)
-        if(checkUser.length === 0){
+        if (checkUser.length === 0) {
             res.status(404).json({
-                message: "User Not Found"
+                message: "User not found"
             })
         }
 
         let hashPassword;
-        if(password){
+        if (password) {
             hashPassword = await bcrypt.hash(password, 10)
         }
 
@@ -65,14 +65,49 @@ app.put('/user/:id', async(req, res) => {
             message: "Update User Successful",
             results
         })
-    } catch (error){
+    } catch (error) {
         res.status(400).json({
             message: "Update User fail",
-            Error: error
+            error
         })
     }
 })
 
+app.get("/users", async (req, res) => {
+    try {
+        const [results] = await conn.query("SELECT username, email, phone, address FROM users")
+        res.status(200).json({
+            message: "Date User",
+            results
+        })
+    } catch (error) {
+        res.status(400).json({
+            message: "Get user fail",
+            error
+        })
+    }
+})
+
+app.get("/user/:id", async (req, res) => {
+    try {
+        const userId = req.params.id
+        const [resutls] = await conn.query("SELECT username, email, phone, address FROM users WHERE id = ?", userId)
+        if (resutls.length === 0) {
+            res.status(404).json({
+                message: "User not found"
+            })
+        }
+        res.status(200).json({
+            message: `User Date`,
+            resutls
+        })
+    } catch (error){
+        res.status(400).json({
+            message: "Get user fail",
+            error
+        })
+    }
+})
 
 
 
