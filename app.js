@@ -19,6 +19,10 @@ const connectMySql = async () => {
     console.log("connect ==> DB")
 }
 
+const oathToken = (req, res, next) =>{
+    console.log("Hello Oath");
+    next();
+}
 
 app.post("/user", async (req, res) => {
     try {
@@ -73,7 +77,7 @@ app.put('/user/:id', async (req, res) => {
     }
 })
 
-app.get("/users", async (req, res) => {
+app.get("/users", oathToken,  async (req, res) => {
     try {
         const [results] = await conn.query("SELECT username, email, phone, address FROM users")
         res.status(200).json({
