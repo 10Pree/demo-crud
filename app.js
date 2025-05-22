@@ -113,6 +113,22 @@ app.get("/user/:id", async (req, res) => {
     }
 })
 
+app.delete("/user/:id", async(req, res) => {
+    const userId = req.params.id
+    const [checkUser] = await conn.query("SELECT * FROM users WHERE id = ?", userId)
+    if(checkUser.length === 0){
+        res.status(404).json({
+            message: "User not fail"
+        })
+    }
+
+    const [results] = await conn.query("DELETE FROM users WHERE id = ?", userId)
+    res.status(200).json({
+        message: "Delete User Successful",
+        results
+    })
+})
+
 
 
 app.listen(post, async () => {
