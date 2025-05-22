@@ -114,7 +114,8 @@ app.get("/user/:id", async (req, res) => {
 })
 
 app.delete("/user/:id", async(req, res) => {
-    const userId = req.params.id
+    try{
+            const userId = req.params.id
     const [checkUser] = await conn.query("SELECT * FROM users WHERE id = ?", userId)
     if(checkUser.length === 0){
         res.status(404).json({
@@ -127,6 +128,12 @@ app.delete("/user/:id", async(req, res) => {
         message: "Delete User Successful",
         results
     })
+    } catch (error) {
+        res.status(404).json({
+            message: "Delete user fail",
+            error
+        })
+    }
 })
 
 
