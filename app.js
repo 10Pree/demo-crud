@@ -14,7 +14,7 @@ app.use(session({
     secret: 'iorhjt0u03u40589298yu31j9',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true }
+    // cookie: { secure: true }
 }))
 
 let conn = null
@@ -28,9 +28,17 @@ const connectMySql = async () => {
     console.log("connect ==> DB")
 }
 
-const oathToken = (req, res, next) => {
-    console.log("Hello Oath");
-    next();
+const oauthToken = (req, res, next) => {
+    try{
+        if(!req.session.userId){
+            return res.status(400).json({
+                message: "Unauthorized"
+            })
+        }
+        next()
+    } catch (error) {
+        res.status()
+    }
 }
 
 app.post("/login", async (req, res) => {
@@ -54,6 +62,10 @@ app.post("/login", async (req, res) => {
             })
         }
 
+        
+        // สร้าง session
+        req.session.userId = userData.id
+        req.session.user = userData
 
 
         res.status(200).json({
@@ -120,7 +132,7 @@ app.put('/user/:id', async (req, res) => {
     }
 })
 
-app.get("/users", oathToken, async (req, res) => {
+app.get("/users", oauthToken, async (req, res) => {
     try {
         const [results] = await conn.query("SELECT username, email, phone, address FROM users")
         res.status(200).json({
