@@ -1,5 +1,5 @@
 {
-  "name": "demo-crud",
+  "name": "backend",
   "version": "1.0.0",
   "description": "Practice Create Read Update DELETE",
   "main": "app.js",

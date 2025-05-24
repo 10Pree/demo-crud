@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>CRUD</title>
+</head>
+
+<body class="p-10">
+    <div class="shadow-xl/20 overflow-auto-x rounded-2xl">
+        <table class="w-full text-sm whitespace-normal">
+            <thead class="text-left uppercase border-b-1">
+                <tr class="">
+                    <th scope="col" class="px-6 py-3">Username</th>
+                    <th scope="col" class="px-6 py-3">Email</th>
+                    <th scope="col" class="px-6 py-3">Phone</th>
+                    <th class="px-6 py-3">Address</th>
+                    <th class="px-6 py-3 text-center">Action</th>
+                </tr>
+            </thead>    
+            <tbody>
+                <tr class="">
+                    <td class="px-6 py-4 text-lg">1</td>
+                    <td class="px-6 py-4">2</td>
+                    <td class="px-6 py-4">3</td>
+                    <td class="px-6 py-4">4</td>
+                    <td class="px-3 py-4 text-center">
+                        <button class="bg-indigo-600 px-3 py-2 rounded-lg text-white hover:bg-indigo-400" type="button">Edit</button>
+                        <button id="loadData" type="button">โหลดข้อมูล</button>
+                        <button class="bg-red-600 px-3 py-2 rounded-lg text-white hover:bg-red-400" type="button">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="/src/api.js" type="module" defer></script>
+</body>
+</html>
