@@ -140,7 +140,7 @@ app.put('/user/:id', async (req, res) => {
 
 app.get("/users",    async (req, res) => {
     try {
-        const [results] = await conn.query("SELECT username, email, phone, address FROM users")
+        const [results] = await conn.query("SELECT id, username, email, phone, address FROM users")
         res.status(200).json({
             message: "Date User",
             results

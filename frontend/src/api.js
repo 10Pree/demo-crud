@@ -1,13 +1,14 @@
 import axios from 'axios';
+
 const getUser = async () => {
     try {
         const response = await axios.get("http://localhost:8000/users");
         // console.log("ข้อมูล:", response.data);
         populateTable(response.data.results)
     } catch (error) {
-        if(error.response){
+        if (error.response) {
             console.log(error.response)
-        } else{
+        } else {
             console.log(error)
         }
     }
@@ -25,14 +26,43 @@ const populateTable = (users) => {
                     <td class="px-6 py-4">${user.phone}</td>
                     <td class="px-6 py-4">${user.address}</td>
                     <td class="px-3 py-4 text-center">
-                        <button class="bg-indigo-600 px-3 py-2 rounded-lg text-white hover:bg-indigo-400" type="button">Edit</button>
-                        <button class="bg-red-600 px-3 py-2 rounded-lg text-white hover:bg-red-400" type="button">Delete</button>
+                        <button class="bg-indigo-600 px-3 py-2 rounded-lg text-white hover:bg-indigo-400"  type="button">Edit</button>
+                        <button class="btn-delete  bg-red-600 px-3 py-2 rounded-lg text-white hover:bg-red-400" data-user-id="${user.id}" type="button">Delete</button>
                     </td>
                 </tr>
         `
         tbody.innerHTML += row
     });
 
-} 
+}
+
+
+const deleteUser = async (id) => {
+    try {
+        const button = id.target
+        const userID = button.dataset.userId
+        
+        if (confirm("จะลบผู้ใช้งานหรือไม")) {
+            const response = await axios.delete(`http://localhost:8000/user/${userID}`)
+            console.log(response)
+            getUser()
+        }
+    } catch (error) {
+        if (error.response) {
+            console.log(error.response)
+        } else {
+            console.log(error)
+        }
+    }
+}
+
+// เมื่อกดคลิก จะหา class ที่มีชื่อที่กำหนดไว้ 
+document.addEventListener('click', (event) => {
+    if (event.target.classList.contains('btn-delete')) {
+        // event จะได้ตำแหน่งมา <button class="btn-delete  bg-red-600 px-3 py-2 rounded-lg text-white hover:bg-red-400" data-user-id="${user.id}" type="button">Delete</button>
+        deleteUser(event)
+        // console.log(event.target)
+    }
+})
 
 getUser()
