@@ -20,7 +20,7 @@ const populateTable = (users) => {
 
     users.forEach(user => {
         const row = `
-                <tr>
+                <tr class="border border-b-1">
                     <td class="px-6 py-4 text-lg">${user.username}</td>
                     <td class="px-6 py-4">${user.email}</td>
                     <td class="px-6 py-4">${user.phone}</td>
