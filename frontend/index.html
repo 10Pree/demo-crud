@@ -45,25 +45,30 @@
                     <div class="grid gap-5 grid-cols-2 text-lg">
                         <div class="col-span-2">
                             <label class="">Username</label>
-                            <input class="block w-full h-10 p-2 bg-gray-200 rounded-lg outline-indigo-500 " type="text"
+                            <input id="username" class="block w-full h-10 p-2 bg-gray-200 rounded-lg outline-indigo-500 " type="text"
                                 placeholder="Non1234">
                         </div>
                         <div class="">
                             <label>Password</label>
-                            <input class="block w-full h-10 p-2 bg-gray-200 rounded-lg outline-indigo-500"
+                            <input id="password" class="block w-full h-10 p-2 bg-gray-200 rounded-lg outline-indigo-500"
                                 type="password" placeholder="N24@ie">
                         </div>
                         <div>
                             <label>email</label>
-                            <input class="block w-full h-10 p-2 bg-gray-200 rounded-lg outline-indigo-500" type="email"
+                            <input id="email" class="block w-full h-10 p-2 bg-gray-200 rounded-lg outline-indigo-500" type="email"
                                 placeholder="Non@gmail.com">
+                        </div>
+                                                <div>
+                            <label>phone</label>
+                            <input id="phone" class="block w-full h-10 p-2 bg-gray-200 rounded-lg outline-indigo-500" type="number"
+                                placeholder="097-98070345">
                         </div>
                         <div class="col-span-2">
                             <label>address</label>
                             <textarea class="block w-full h-20 p-2 bg-gray-200 rounded-lg outline-indigo-500"
                                 name="address" id="address" placeholder="2/7 m...."></textarea>
                         </div>
-                        <button class="bg-indigo-500 h-10 rounded-lg text-white uppercase font-bold "
+                        <button id="btn-addUser" class="bg-indigo-500 h-10 rounded-lg text-white uppercase font-bold "
                             type="submit">Add</button>
                 </form>
             </div>

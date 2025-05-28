@@ -1,8 +1,9 @@
 import axios from 'axios';
 
+const POST = 'http://localhost:8000'
 const getUser = async () => {
     try {
-        const response = await axios.get("http://localhost:8000/users");
+        const response = await axios.get(`${POST}/users`);
         // console.log("ข้อมูล:", response.data);
         populateTable(response.data.results)
     } catch (error) {
@@ -41,9 +42,9 @@ const deleteUser = async (id) => {
     try {
         const button = id.target
         const userID = button.dataset.userId
-        
+
         if (confirm("จะลบผู้ใช้งานหรือไม")) {
-            const response = await axios.delete(`http://localhost:8000/user/${userID}`)
+            const response = await axios.delete(`${POST}/user/${userID}`)
             console.log(response)
             getUser()
         }
@@ -65,4 +66,38 @@ document.addEventListener('click', (event) => {
     }
 })
 
+
+const addUser = async () => {
+    try {
+        const userInput = {
+            username: document.querySelector('#username').value,
+            password: document.querySelector('#password').value,
+            email: document.querySelector('#email').value,
+            phone: document.querySelector('#phone').value,
+            address: document.querySelector('#address').value
+        }
+
+        const { username, password, email, phone, address } = userInput
+
+        const response = await axios.post(`${POST}/user`, {
+            username,
+            password,
+            email,
+            phone,
+            address
+        })
+        getUser()
+
+        console.log(response)
+    } catch (error) {
+        if (error.response) {
+            console.log(error.response)
+        } else {
+            console.log(error)
+        }
+    }
+}
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('#btn-addUser').addEventListener('click', addUser)
+})
 getUser()
