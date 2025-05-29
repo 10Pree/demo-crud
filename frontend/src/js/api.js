@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios from 'axios';    
 
-const POST = 'http://localhost:8000'
+const URL = 'http://localhost:8000'
 const getUser = async () => {
     try {
-        const response = await axios.get(`${POST}/users`);
+        const response = await axios.get(`${URL}/users`);
         // console.log("ข้อมูล:", response.data);
         populateTable(response.data.results)
     } catch (error) {
@@ -14,6 +14,65 @@ const getUser = async () => {
         }
     }
 };
+
+const deleteUser = async (id) => {
+    try {
+        const button = id.target
+        const userID = button.dataset.userId
+
+        if (confirm("จะลบผู้ใช้งานหรือไม")) {
+            const response = await axios.delete(`${URL}/user/${userID}`)
+            console.log(response)
+            getUser()
+        }
+    } catch (error) {
+        if (error.response) {
+            console.log(error.response)
+        } else {
+            console.log(error)
+        }
+    }
+}
+
+
+const addUser = async () => {
+    try {
+        const PopupModal = document.querySelector('#modal')
+        const username = document.querySelector('#username')
+        const password = document.querySelector('#password')
+        const email = document.querySelector('#email')
+        const phone = document.querySelector('#phone')
+        const address = document.querySelector('#address')
+
+
+        const response = await axios.post(`${URL}/user`, {
+            username: username.value,
+            password: password.value,
+            email: password.value,
+            phone: phone.value,
+            address: address.value
+        })
+
+        PopupModal.classList.remove('block')
+        PopupModal.classList.add('hidden')
+        
+        username.value = ''
+        password.value = ''
+        email.value = ''
+        phone.value = ''
+        address.value = ''
+
+        getUser()
+
+        console.log(response)
+    } catch (error) {
+        if (error.response) {
+            console.log(error.response)
+        } else {
+            console.log(error)
+        }
+    }
+}
 
 const populateTable = (users) => {
     const tbody = document.querySelector('#tableBody')
@@ -37,25 +96,9 @@ const populateTable = (users) => {
 
 }
 
-
-const deleteUser = async (id) => {
-    try {
-        const button = id.target
-        const userID = button.dataset.userId
-
-        if (confirm("จะลบผู้ใช้งานหรือไม")) {
-            const response = await axios.delete(`${POST}/user/${userID}`)
-            console.log(response)
-            getUser()
-        }
-    } catch (error) {
-        if (error.response) {
-            console.log(error.response)
-        } else {
-            console.log(error)
-        }
-    }
-}
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('#btn-addUser').addEventListener('click', addUser)
+})
 
 // เมื่อกดคลิก จะหา class ที่มีชื่อที่กำหนดไว้ 
 document.addEventListener('click', (event) => {
@@ -67,37 +110,4 @@ document.addEventListener('click', (event) => {
 })
 
 
-const addUser = async () => {
-    try {
-        const userInput = {
-            username: document.querySelector('#username').value,
-            password: document.querySelector('#password').value,
-            email: document.querySelector('#email').value,
-            phone: document.querySelector('#phone').value,
-            address: document.querySelector('#address').value
-        }
-
-        const { username, password, email, phone, address } = userInput
-
-        const response = await axios.post(`${POST}/user`, {
-            username,
-            password,
-            email,
-            phone,
-            address
-        })
-        getUser()
-
-        console.log(response)
-    } catch (error) {
-        if (error.response) {
-            console.log(error.response)
-        } else {
-            console.log(error)
-        }
-    }
-}
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelector('#btn-addUser').addEventListener('click', addUser)
-})
 getUser()
