@@ -1,13 +1,25 @@
-const popupOpen = document.querySelector('#popup-open')
-const popupClose = document.querySelector('#popup-close')
-const PopupModal = document.querySelector('#modal')
+const popupOpenAdd = document.querySelector('#popup-open-add')
+const popupCloseAdd = document.querySelector('#popup-close-add')
+const PopupModalAdd = document.querySelector('#modal-add-user')
 
-popupOpen.addEventListener('click', () => {
-  PopupModal.classList.remove('hidden')
-  PopupModal.classList.add("block")
+const popupCloseUpdate = document.querySelector('#popup-close-update')
+const PopupModalUpdate = document.querySelector('#modal-update-user')  
+
+// Popup From Add User
+popupOpenAdd.addEventListener('click', () => {
+  PopupModalAdd.classList.remove('hidden')
+  PopupModalAdd.classList.add("block")
 })
 
-popupClose.addEventListener('click', () =>{
-  PopupModal.classList.remove('block')
-  PopupModal.classList.add('hidden')
+popupCloseAdd.addEventListener('click', () => {
+  PopupModalAdd.classList.remove('block')
+  PopupModalAdd.classList.add('hidden')
 })
+
+// Popup Close From User 
+// document.addEventListener('click', (event) => {
+//   if (event.target.classList.contains('popup-open-update')) {
+//     PopupModalUpdate.classList.remove('hidden')
+//     PopupModalUpdate.classList.add('block')
+//   }
+// })
