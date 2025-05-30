@@ -155,7 +155,7 @@ app.get("/users",    async (req, res) => {
 app.get("/user/:id", async (req, res) => {
     try {
         const userId = req.params.id
-        const [results] = await conn.query("SELECT username, email, phone, address FROM users WHERE id = ?", userId)
+        const [results] = await conn.query("SELECT id, username, email, phone, address FROM users WHERE id = ?", userId)
         if (results.length === 0) {
             res.status(404).json({
                 message: "User not found"
