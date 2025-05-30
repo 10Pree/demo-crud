@@ -155,15 +155,15 @@ app.get("/users",    async (req, res) => {
 app.get("/user/:id", async (req, res) => {
     try {
         const userId = req.params.id
-        const [resutls] = await conn.query("SELECT username, email, phone, address FROM users WHERE id = ?", userId)
-        if (resutls.length === 0) {
+        const [results] = await conn.query("SELECT username, email, phone, address FROM users WHERE id = ?", userId)
+        if (results.length === 0) {
             res.status(404).json({
                 message: "User not found"
             })
         }
         res.status(200).json({
             message: `User Date`,
-            resutls
+            results
         })
     } catch (error) {
         res.status(400).json({
