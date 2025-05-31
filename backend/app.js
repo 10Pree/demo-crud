@@ -1,41 +1,22 @@
 const express = require("express")
-const mysql = require("mysql2/promise")
 const bcrypt = require('bcrypt')
 const session = require("express-session")
 const jwt = require("jsonwebtoken")
 const cors = require("cors")
+const cookieParser = require("cookie-parser")
+const { getDB } = require("./config/database")
 
 const app = express();
-const port = 8000
+const secret = "ifjgopeui9kls9843kif3jok9sfjn"
 
 app.use(express.json())
+app.use(cookieParser())
 
 app.use(cors({
     origin: "http://localhost:5173",
     credentials: true
 }))
 
-app.use(session({
-    secret: 'iorhjt0u03u40589298yu31j9',
-    resave: false,
-    saveUninitialized: true,
-    // cookie: { secure: true }
-}))
-
-let conn = null
-const connectMySql = async() => {
-    conn = await mysql.createPool({
-        host: "localhost",
-        user: "root",
-        password: "root",
-        database: "practice-cred",
-        // การใช้ Pool
-        waitForConnections: true, //  ถ้าไม่มี connection ว่าง จะให้รอ (ไม่ล้มเหลวทันที)
-        connectionLimit: 10,      //  จำนวนสูงสุดของ connection ที่จะเปิดพร้อมกันใน pool
-        queueLimit: 0             //  จำนวนคำขอที่รอคิวได้ (0 = ไม่จำกัด)
-    });
-    console.log("connect ==> DB")
-}
 
 const oauthToken = (req, res, next) => {
     try {
@@ -55,6 +36,7 @@ app.post("/login", async (req, res) => {
         const { email, password } = req.body
 
         // หาอีเมล ว่ามีอยู่ จริง
+        const conn = getDB()
         const [results] = await conn.query("SELECT * FROM users WHERE email = ?", [email])
         if (results.length === 0) {
             return res.status(401).json({
@@ -71,11 +53,11 @@ app.post("/login", async (req, res) => {
             })
         }
 
+        const token = jwt.sign({ email , role: "test"}, secret ,{
+            expiresIn: "1h"
+        })
 
-        // สร้าง session
-        req.session.userId = userData.id
-        req.session.user = userData
-
+        console.log("token", token)
 
         res.status(200).json({
             message: "Login Successful"
@@ -96,6 +78,7 @@ app.post("/user", async (req, res) => {
 
         const userData = { username, password: hash, email, phone, address }
 
+        const conn = getDB()
         const [results] = await conn.query("INSERT INTO users SET ?", userData)
 
         res.status(201).json({
@@ -113,6 +96,8 @@ app.put('/user/:id', async (req, res) => {
     try {
         const userId = req.params.id
         const { username, password, email, phone, address } = req.body
+        // ติดต่อ BD
+        const conn = getDB()
 
         const [checkUser] = await conn.query("SELECT * FROM users WHERE id = ?", userId)
         if (checkUser.length === 0) {
@@ -138,8 +123,10 @@ app.put('/user/:id', async (req, res) => {
     }
 })
 
-app.get("/users",    async (req, res) => {
+app.get("/users", async (req, res) => {
     try {
+        // ติดต่อ BD
+        const conn = getDB()
         const [results] = await conn.query("SELECT id, username, email, phone, address FROM users")
         res.status(200).json({
             message: "Date User",
@@ -155,6 +142,8 @@ app.get("/users",    async (req, res) => {
 app.get("/user/:id", async (req, res) => {
     try {
         const userId = req.params.id
+        // ติดต่อ BD
+        const conn = getDB()
         const [results] = await conn.query("SELECT id, username, email, phone, address FROM users WHERE id = ?", userId)
         if (results.length === 0) {
             res.status(404).json({
@@ -175,6 +164,8 @@ app.get("/user/:id", async (req, res) => {
 app.delete("/user/:id", async (req, res) => {
     try {
         const userId = req.params.id
+        // ติดต่อ BD
+        const conn = getDB()
         const [checkUser] = await conn.query("SELECT * FROM users WHERE id = ?", userId)
         if (checkUser.length === 0) {
             res.status(404).json({
@@ -194,10 +185,4 @@ app.delete("/user/:id", async (req, res) => {
     }
 })
 
-
-
-
-app.listen(port, async () => {
-    await connectMySql()
-    console.log(`Start Server ${port}`)
-})
+module.exports = app
