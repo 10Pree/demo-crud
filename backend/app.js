@@ -1,10 +1,10 @@
 const express = require("express")
 const bcrypt = require('bcrypt')
-const session = require("express-session")
 const jwt = require("jsonwebtoken")
 const cors = require("cors")
 const cookieParser = require("cookie-parser")
 const { getDB } = require("./config/database")
+
 
 const app = express();
 const secret = "ifjgopeui9kls9843kif3jok9sfjn"
@@ -17,18 +17,11 @@ app.use(cors({
     credentials: true
 }))
 
-
-const oauthToken = (req, res, next) => {
-    try {
-        if (!req.session.userId) {
-            return res.status(400).json({
-                message: "Unauthorized"
-            })
-        }
-        next()
-    } catch (error) {
-        res.status()
-    }
+const createAccessToken = (email, role) => {
+    return access_token = jwt.sign({ email, role }, secret, { expiresIn: "1m" })
+}
+const createRefreshToken = (email, role) => {
+    return refresh_token = jwt.sign({ email, role }, secret, { expiresIn: "30d" })
 }
 
 app.post("/login", async (req, res) => {
@@ -52,12 +45,27 @@ app.post("/login", async (req, res) => {
                 message: "Login Fail Wrong Email Password",
             })
         }
+        const role = "admin"
+        // สร้าง Refresh Tokens กับ  Access Token
+        const refresh_token = createRefreshToken(email, role)
+        const access_token = createAccessToken(email, role)
 
-        const token = jwt.sign({ email , role: "test"}, secret ,{
-            expiresIn: "1h"
-        })
+        const expires = new Date()
+        expires.setDate(expires.getDate() + 30)
 
-        console.log("token", token)
+        const refreshTokenDate = {
+            user_id: userData.id,
+            token: refresh_token,
+            expires_at: expires,
+            is_revoked: false,
+            device_info: JSON.stringify({
+                user_agent: req.headers['user-agent'],
+                ip: req.ip
+            })
+        }
+
+        const [refreshToken] = await conn.query('INSERT INTO refresh_tokens SET ?', refreshTokenDate )
+        // console.log(`access_token = ${access_token} , refresh_token = ${refresh_token}`)
 
         res.status(200).json({
             message: "Login Successful"
