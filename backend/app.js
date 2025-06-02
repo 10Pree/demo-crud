@@ -4,10 +4,9 @@ const jwt = require("jsonwebtoken")
 const cors = require("cors")
 const cookieParser = require("cookie-parser")
 const { getDB } = require("./config/database")
-
+const { oauthToken, createAccessToken, createRefreshToken} = require("./middleware/authentication")
 
 const app = express();
-const secret = "ifjgopeui9kls9843kif3jok9sfjn"
 
 app.use(express.json())
 app.use(cookieParser())
@@ -16,13 +15,6 @@ app.use(cors({
     origin: "http://localhost:5173",
     credentials: true
 }))
-
-const createAccessToken = (email, role) => {
-    return access_token = jwt.sign({ email, role }, secret, { expiresIn: "1m" })
-}
-const createRefreshToken = (email, role) => {
-    return refresh_token = jwt.sign({ email, role }, secret, { expiresIn: "30d" })
-}
 
 app.post("/login", async (req, res) => {
     try {
@@ -49,6 +41,7 @@ app.post("/login", async (req, res) => {
         // สร้าง Refresh Tokens กับ  Access Token
         const refresh_token = createRefreshToken(email, role)
         const access_token = createAccessToken(email, role)
+        
 
         const expires = new Date()
         expires.setDate(expires.getDate() + 30)
@@ -64,15 +57,18 @@ app.post("/login", async (req, res) => {
             })
         }
 
+
         const [refreshToken] = await conn.query('INSERT INTO refresh_tokens SET ?', refreshTokenDate )
-        // console.log(`access_token = ${access_token} , refresh_token = ${refresh_token}`)
 
         res.status(200).json({
-            message: "Login Successful"
+            message: "Login Successful",
+            refresh_token: refresh_token,
+            access_token: access_token
         })
     } catch (error) {
         res.status(500).json({
             message: "Internal server error",
+            error
         })
     }
 });
@@ -131,7 +127,7 @@ app.put('/user/:id', async (req, res) => {
     }
 })
 
-app.get("/users", async (req, res) => {
+app.get("/users", oauthToken, async (req, res) => {
     try {
         // ติดต่อ BD
         const conn = getDB()
