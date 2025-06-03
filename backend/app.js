@@ -37,15 +37,15 @@ app.post("/login", async (req, res) => {
                 message: "Login Fail Wrong Email Password",
             })
         }
-        const role = "admin"
-        // สร้าง Refresh Tokens กับ  Access Token
-        const refresh_token = createRefreshToken(email, role)
-        const access_token = createAccessToken(email, role)
         
-
+        // สร้าง Refresh Tokens กับ  Access Token
+        const role = "admin"
+        const refresh_token = createRefreshToken(userData.id, email, role)
+        const access_token = createAccessToken(userData.id, email, role)
+        
         const expires = new Date()
         expires.setDate(expires.getDate() + 30)
-
+        
         const refreshTokenDate = {
             user_id: userData.id,
             token: refresh_token,
@@ -56,7 +56,7 @@ app.post("/login", async (req, res) => {
                 ip: req.ip
             })
         }
-
+        
 
         const [refreshToken] = await conn.query('INSERT INTO refresh_tokens SET ?', refreshTokenDate )
 

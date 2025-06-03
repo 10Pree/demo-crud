@@ -23,11 +23,11 @@ const oauthToken = (req, res, next) => {
     }
 }
 
-const createAccessToken = (email, role) => {
-    return access_token = jwt.sign({ email, role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1m" })
+const createAccessToken = (id, email, role) => {
+    return access_token = jwt.sign({ id, email, role  }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1m" })
 }
-const createRefreshToken = (email, role) => {
-    return refresh_token = jwt.sign({ email, role }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "30d" })
+const createRefreshToken = (id, email, role) => {
+    return refresh_token = jwt.sign({ id, email, role }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "30d" })
 }
 
 module.exports = { oauthToken, createAccessToken, createRefreshToken}
