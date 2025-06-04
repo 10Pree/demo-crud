@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken")
 const cors = require("cors")
 const cookieParser = require("cookie-parser")
 const { getDB } = require("./config/database")
-const { oauthToken, createAccessToken, createRefreshToken} = require("./middleware/authentication")
+const { oauthToken, createAccessToken, createRefreshToken } = require("./middleware/authentication")
 
 const app = express();
 
@@ -37,15 +37,15 @@ app.post("/login", async (req, res) => {
                 message: "Login Fail Wrong Email Password",
             })
         }
-        
+
         // สร้าง Refresh Tokens กับ  Access Token
         const role = "admin"
         const refresh_token = createRefreshToken(userData.id, email, role)
         const access_token = createAccessToken(userData.id, email, role)
-        
+
         const expires = new Date()
         expires.setDate(expires.getDate() + 30)
-        
+
         const refreshTokenDate = {
             user_id: userData.id,
             token: refresh_token,
@@ -56,9 +56,9 @@ app.post("/login", async (req, res) => {
                 ip: req.ip
             })
         }
-        
 
-        const [refreshToken] = await conn.query('INSERT INTO refresh_tokens SET ?', refreshTokenDate )
+
+        const [refreshToken] = await conn.query('INSERT INTO refresh_tokens SET ?', refreshTokenDate)
 
         res.status(200).json({
             message: "Login Successful",
@@ -185,6 +185,78 @@ app.delete("/user/:id", async (req, res) => {
     } catch (error) {
         res.status(404).json({
             message: "Delete user fail",
+        })
+    }
+})
+
+app.post('/role', async (req, res) => {
+    try {
+        const { name } = req.body
+        const conn = getDB()
+        const [results] = await conn.query('INSERT INTO roles SET ?', { name })
+
+        res.status(201).json({
+            message: "Create Successful",
+            results
+        })
+    } catch (error) {
+        res.status(400).json({
+            message: "Create fail",
+            error
+        })
+    }
+})
+
+app.post('/permission', async (req, res) => {
+    try {
+        const { name } = req.body
+        const conn = getDB()
+
+        const [results] = await conn.query('INSERT INTO permission SET ?', { name })
+        res.status(201).json({
+            message: "Create Successful",
+            results
+        })
+    } catch (error) {
+        res.status(400).json({
+            message: "Create fail",
+            error
+        })
+    }
+})
+
+app.post('/user_roles', async (req, res) => {
+    try {
+        const { users_id, roles_id } = req.body
+
+        const conn = getDB()
+        const [results] = await conn.query('INSERT INTO user_roles SET ?', { users_id, roles_id })
+        res.status(201).json({
+            message: "Create Successful",
+            results
+        })
+    } catch (error) {
+        res.status(400).json({
+            message: "Create fail",
+            error
+        })
+    }
+})
+
+app.post('/role_permissions', async(req, res) => {
+    try{
+            const { roles_id, permissions_id} = req.body
+    const conn = getDB()
+
+    const [results] = await conn.query('INSERT INTO role_permissions SET ?', { roles_id, permissions_id})
+        res.status(201).json({
+            message: "Create Successful",
+            results
+        })
+    } catch (error) {
+        res.status(400).json({
+            message: "Create fail",
+            error
         })
     }
 })
