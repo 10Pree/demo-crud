@@ -3,8 +3,8 @@ const bcrypt = require('bcrypt')
 const jwt = require("jsonwebtoken")
 const cors = require("cors")
 const cookieParser = require("cookie-parser")
-const { getDB } = require("./config/database")
-const { oauthToken, createAccessToken, createRefreshToken } = require("./middleware/authentication")
+const { getDB } = require("./src/config/database")
+const { oauthToken, createAccessToken, createRefreshToken } = require("./src/middleware/authentication")
 
 const app = express();
 
@@ -39,15 +39,14 @@ app.post("/login", async (req, res) => {
         }
 
         // สร้าง Refresh Tokens กับ  Access Token
-        const role = "admin"
-        const refresh_token = createRefreshToken(userData.id, email, role)
-        const access_token = createAccessToken(userData.id, email, role)
+        const refresh_token = createRefreshToken(userData.id, email)
+        const access_token = createAccessToken(userData.id, email)
 
         const expires = new Date()
         expires.setDate(expires.getDate() + 30)
 
         const refreshTokenDate = {
-            user_id: userData.id,
+            users_id: userData.id,
             token: refresh_token,
             expires_at: expires,
             is_revoked: false,
@@ -66,10 +65,11 @@ app.post("/login", async (req, res) => {
             access_token: access_token
         })
     } catch (error) {
-        res.status(500).json({
-            message: "Internal server error",
-            error
-        })
+    console.log("Login Error:", error); // ✅ เพิ่มบรรทัดนี้
+    res.status(500).json({
+        message: "Internal server error",
+        error
+    });
     }
 });
 

@@ -1,5 +1,9 @@
+const { error } = require("console");
+const { request } = require("http");
 const jwt = require("jsonwebtoken")
-require('dotenv').config()
+const path = require('path');
+const { getDB } = require("./src/config/database")
+require('dotenv').config();
 
 
 const oauthToken = (req, res, next) => {
@@ -23,11 +27,33 @@ const oauthToken = (req, res, next) => {
     }
 }
 
-const createAccessToken = (id, email, role) => {
-    return access_token = jwt.sign({ id, email, role  }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1m" })
+// CheckPermission
+const checkPermission = async(userId, Permission) => {
+    try {
+        const queryText = `
+        SETECT p.name
+        FROM users u
+        JOIN roles r on u.id = r.id
+        JOIN role_permission rp on rp.roles_id = r.id 
+        JOIN permission p on p.id = rp.roles_id 
+        WHERE u.id = ? and p.name
+        `
+        const conn = getDB()
+        const results = await conn.query(queryText,[userId, Permission])
+        console.log(results)
+    } catch(error) {
+        return false
+    }
 }
-const createRefreshToken = (id, email, role) => {
-    return refresh_token = jwt.sign({ id, email, role }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "30d" })
+
+// CreateToken
+const createAccessToken = (id, email) => {
+    return access_token = jwt.sign({ id, email  }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1m" })
 }
+const createRefreshToken = (id, email) => {
+    return refresh_token = jwt.sign({ id, email }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "30d" })
+}
+
+
 
 module.exports = { oauthToken, createAccessToken, createRefreshToken}

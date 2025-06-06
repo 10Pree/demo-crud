@@ -1,5 +1,5 @@
 const app = require('./app')
-const { connectMySql } = require("./config/database")
+const { connectMySql } = require("./src/config/database")
 
 const port = 8000
 
