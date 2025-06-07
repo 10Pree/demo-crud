@@ -3,8 +3,8 @@ const bcrypt = require('bcrypt')
 const jwt = require("jsonwebtoken")
 const cors = require("cors")
 const cookieParser = require("cookie-parser")
-const { getDB } = require("./src/config/database")
-const { oauthToken, createAccessToken, createRefreshToken } = require("./src/middleware/authentication")
+const { getDB } = require("./config/database")
+const { checkPermission, createAccessToken, createRefreshToken } = require("./middleware/authentication")
 
 const app = express();
 
@@ -127,7 +127,7 @@ app.put('/user/:id', async (req, res) => {
     }
 })
 
-app.get("/users", oauthToken, async (req, res) => {
+app.get("/users", checkPermission('read'), async (req, res) => {
     try {
         // ติดต่อ BD
         const conn = getDB()

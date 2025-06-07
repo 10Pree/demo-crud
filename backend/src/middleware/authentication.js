@@ -1,12 +1,10 @@
-const { error } = require("console");
-const { request } = require("http");
 const jwt = require("jsonwebtoken")
-const path = require('path');
-const { getDB } = require("./src/config/database")
+const { getDB } = require('../config/database')
 require('dotenv').config();
 
 
-const oauthToken = (req, res, next) => {
+const checkPermission = (requestPermission) => { 
+       return async(req, res, next) => {
     try {
         const authHeaders = req.headers['authorization']
         const token = authHeaders && authHeaders.split(" ")[1]
@@ -18,7 +16,14 @@ const oauthToken = (req, res, next) => {
 
         const user = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
         req.user = user
-        console.log("user",user)
+        const hasPermission  = await getPermission(user.id, requestPermission)
+        if(!hasPermission){
+            return res.status(403).json({
+               message: "Insufficient permissions",
+               hasPermission
+            })
+        }
+
         next()
     } catch (error) {
         return res.status(403).json({
@@ -26,22 +31,26 @@ const oauthToken = (req, res, next) => {
         })
     }
 }
+}
 
 // CheckPermission
-const checkPermission = async(userId, Permission) => {
+const getPermission = async(userId, Permission) => {
     try {
         const queryText = `
-        SETECT p.name
+        SELECT p.name
         FROM users u
-        JOIN roles r on u.id = r.id
-        JOIN role_permission rp on rp.roles_id = r.id 
-        JOIN permission p on p.id = rp.roles_id 
-        WHERE u.id = ? and p.name
-        `
+        JOIN user_roles ur on u.id = ur.users_id
+        JOIN roles r on ur.roles_id = r.id
+        JOIN role_permissions rp on r.id = rp.roles_id
+        JOIN permissions p on rp.permissions_id = p.id
+        WHERE u.id = ? and p.name = ?
+        `;
         const conn = getDB()
-        const results = await conn.query(queryText,[userId, Permission])
-        console.log(results)
+        const [results] = await conn.query(queryText,[userId, Permission])
+        console.log([results])
+        return results.length > 0
     } catch(error) {
+        console.log(error)
         return false
     }
 }
@@ -56,4 +65,4 @@ const createRefreshToken = (id, email) => {
 
 
 
-module.exports = { oauthToken, createAccessToken, createRefreshToken}
+module.exports = { checkPermission, createAccessToken, createRefreshToken}
