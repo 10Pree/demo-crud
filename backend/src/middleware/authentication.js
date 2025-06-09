@@ -55,14 +55,7 @@ const getPermission = async(userId, Permission) => {
     }
 }
 
-// CreateToken
-const createAccessToken = (id, email) => {
-    return access_token = jwt.sign({ id, email  }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1m" })
-}
-const createRefreshToken = (id, email) => {
-    return refresh_token = jwt.sign({ id, email }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "30d" })
-}
 
 
 
-module.exports = { checkPermission, createAccessToken, createRefreshToken}
+module.exports = { checkPermission  }

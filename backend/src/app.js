@@ -31,7 +31,7 @@
 
 //         // ตรวจสอบ ว่า password มีอยู่จริง
 //         const userData = results[0]
-//         const match = await bcrypt.compare(password, userData.password)
+//         const match = await bcrypt.compare(password, userData.   )
 //         if (!match) {
 //             return res.status(401).json({
 //                 message: "Login Fail Wrong Email Password",
