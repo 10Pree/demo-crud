@@ -10,6 +10,15 @@ class Usermodels {
             throw error
         }
     }
+    static async getUserID(userid) {
+        try {
+            const conn = getDB()
+            const [results] = await conn.query('SELECT id, username, email, phone, address  FROM users WHERE id = ?', userid)
+            return results
+        } catch (error) {
+            throw error
+        }
+    }
     static async findByEmail(email) {
         const conn = getDB()
         const [results] = await conn.query('SELECT * FROM users WHERE email = ?', [email])
@@ -19,6 +28,24 @@ class Usermodels {
         try {
             const conn = getDB()
             const [results] = await conn.query('SELECT id, username, email, phone, address FROM users')
+            return results
+        } catch (error) {
+            throw error
+        }
+    }
+    static async deleteUserID(userid) {
+        try {
+            const conn = getDB()
+            const [results] = await conn.query('DELETE FROM users WHERE id = ?', userid)
+            return results
+        } catch (error) {
+            throw error
+        }
+    }
+    static async update(userData, userid) {
+        try {
+            const conn = getDB()
+            const [results] = await conn.query('UPDATE users SET ? WHERE id = ?', [userData, userid])
             return results
         } catch (error) {
             throw error

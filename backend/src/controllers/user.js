@@ -23,6 +23,7 @@ class UserController {
                 data: crateUser
             })
         } catch (error) {
+            console.error(error)
             res.status(500).json({
                 message: "Internal Server Error"
             })
@@ -36,11 +37,112 @@ class UserController {
                 data: data
             })
         } catch (error) {
+            console.error(error)
             res.status(500).json({
                 message: "Internal Server Error"
             })
         }
     }
+    static async getUserID(req, res) {
+        try {
+            const userId = req.params.id
+            if (!userId) {
+                return res.status(400).json({
+                    message: "Missing user id"
+                })
+            }
+            const getDateUserID = await Usermodels.getUserID(userId)
+            if (!getDateUserID) {
+                return res.status(404).json({
+                    message: "User not found"
+                })
+            }
+            res.status(200).json({
+                message: "Successful",
+                getDateUserID
+            })
+        } catch (error) {
+            console.error(error)
+            res.status(500).json({
+                message: "Internal Server Error"
+            })
+        }
+    }
+    static async deleteUserID(req, res) {
+        try {
+            const userId = req.params.id
+            if (!userId) {
+                return res.status(400).json({
+                    message: "Missing user id"
+                })
+            }
+            const checkUser = await Usermodels.getUserID(userId)
+            if (checkUser.length === 0) {
+                return res.status(404).json({
+                    message: "User not found"
+                })
+            }
+            const deleteuser = await Usermodels.deleteUserID(userId)
+            if (!deleteuser) {
+                return res.status(404).json({
+                    message: "User not found"
+                })
+            }
+            res.status(200).json({
+                message: "Successful",
+                deleteuser
+            })
+        } catch (error) {
+            console.error(error)
+            res.status(500).json({
+                message: "Internal Server Error"
+            })
+        }
+    }
+    static async update(req, res) {
+        try {
+            const userId = req.params.id
+            const { username, password, email, phone, address } = req.body
+            if (!userId) {
+                return res.status(400).json({
+                    message: "Missing user id"
+                })
+            }
+            const checkUser = await Usermodels.getUserID(userId)
+            if (checkUser.length === 0) {
+                return res.status(404).json({
+                    message: "User not found"
+                })
+            }
+            const userData = {}
+            if (username) {
+                userData.username = username
+            }
+            if (password) {
+                userData.password = await bcrypt.hash(password, 10)
+            }
+            if (email) {
+                userData.email = email
+            }
+            if (phone) {
+                userData.phone = phone
+            }
+            if (address) {
+                userData.address = address
+            }
+            const updateResult = await Usermodels.update(userData, userId)
+            res.status(200).json({
+                message: "Successful",
+                updateResult
+            })
+        } catch (error) {
+            console.error(error)
+            res.status(500).json({
+                message: "Internal Server Error"
+            })
+        }
+    }
+
 }
 
 module.exports = UserController

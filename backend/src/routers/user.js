@@ -1,12 +1,15 @@
 const express = require("express")
 const authentication = require('../middleware/authentication')
-const user = require('../controllers/user')
-const auth = require('../controllers/auth')
+const usercontrollers = require('../controllers/user')
+const authcontrollers = require('../controllers/auth')
 const router = express.Router();
 
 router.use(express.json())
 
-router.post('/user', user.createUser)
-router.get('/users',authentication.checkPermission("read"), user.getUsers)
+router.post('/user', usercontrollers.createUser)
+router.get('/user/:id', usercontrollers.getUserID)
+router.get('/users',authentication.checkPermission("read"), usercontrollers.getUsers)
+router.put('/user/:id', usercontrollers.update)
+router.delete('/user/:id', usercontrollers.deleteUserID)
 
 module.exports = router 

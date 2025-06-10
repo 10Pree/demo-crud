@@ -14,7 +14,7 @@ const checkPermission = (requestPermission) => {
             })
         }
 
-        const user = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
+        const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.user = user
         const hasPermission  = await getPermission(user.id, requestPermission)
         if(!hasPermission){
@@ -23,7 +23,6 @@ const checkPermission = (requestPermission) => {
                hasPermission
             })
         }
-
         next()
     } catch (error) {
         return res.status(403).json({
@@ -34,7 +33,7 @@ const checkPermission = (requestPermission) => {
 }
 
 // CheckPermission
-const getPermission = async(userId, Permission) => {
+const getPermission = async(userId, requestPermission) => {
     try {
         const queryText = `
         SELECT p.name
@@ -46,7 +45,7 @@ const getPermission = async(userId, Permission) => {
         WHERE u.id = ? and p.name = ?
         `;
         const conn = getDB()
-        const [results] = await conn.query(queryText,[userId, Permission])
+        const [results] = await conn.query(queryText,[userId, requestPermission])
         console.log([results])
         return results.length > 0
     } catch(error) {
