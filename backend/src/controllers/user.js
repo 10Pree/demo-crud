@@ -20,7 +20,7 @@ class UserController {
 
             res.status(201).json({
                 message: "Create Successful",
-                data: crateUser
+                Userdata: crateUser
             })
         } catch (error) {
             console.error(error)
@@ -34,7 +34,7 @@ class UserController {
             const data = await Usermodels.getUsers()
             res.status(200).json({
                 message: "Successful",
-                data: data
+                Userdata: data
             })
         } catch (error) {
             console.error(error)
@@ -59,7 +59,7 @@ class UserController {
             }
             res.status(200).json({
                 message: "Successful",
-                getDateUserID
+                Userdata: getDateUserID
             })
         } catch (error) {
             console.error(error)
@@ -133,7 +133,7 @@ class UserController {
             const updateResult = await Usermodels.update(userData, userId)
             res.status(200).json({
                 message: "Successful",
-                updateResult
+                Userdata: updateResult
             })
         } catch (error) {
             console.error(error)

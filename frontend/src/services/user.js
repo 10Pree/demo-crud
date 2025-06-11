@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const URL = 'http://localhost:8000'
-
+const URL = import.meta.env.VITE_URL_API;
 
 const createUser = async () => {
     try {
@@ -52,7 +51,7 @@ const readUsers = async () => {
         // API
         const response = await axios.get(`${URL}/users`);
         // ส่งข้อมูลไป แสดง Table
-        populateTable(response.data.results)
+        populateTable(response.data.Userdata)
     } catch (error) {
         if (error.response) {
             console.log(error.response)
@@ -76,7 +75,8 @@ const readuser = async (id) => {
 
         // API
         const response = await axios.get(`${URL}/user/${userId}`)
-        const DataUser = response.data.results[0]
+        console.log(response.data.Userdata)
+        const DataUser = response.data.Userdata[0]
         username.value = DataUser.username
         // password.value = DataUser.password
         email.value = DataUser.email

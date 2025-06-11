@@ -8,7 +8,7 @@ router.use(express.json())
 
 router.post('/user', usercontrollers.createUser)
 router.get('/user/:id', usercontrollers.getUserID)
-router.get('/users',authentication.checkPermission("read"), usercontrollers.getUsers)
+router.get('/users', usercontrollers.getUsers)
 router.put('/user/:id', usercontrollers.update)
 router.delete('/user/:id', usercontrollers.deleteUserID)
 
