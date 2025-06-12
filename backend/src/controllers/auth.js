@@ -17,6 +17,7 @@ class authController {
                     message: "Login Fail Wrong Email Password"
                 })
             }
+            await tokensModel.revokeTokensByUser(data.id)
             // createToken
             const access_token = await createAccessToken(data.id, data.email)
             const refresh_token = await createRefreshToken(data.id, data.email)
@@ -42,8 +43,7 @@ class authController {
             }
             res.status(200).json({
                 message: "Login Successful",
-                access_token,
-                refresh_token
+                access_token
             })
         } catch (error) {
             res.status(500).json({

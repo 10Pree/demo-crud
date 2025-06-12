@@ -3,16 +3,22 @@ const URL = import.meta.env.VITE_URL_API;
 
 const login = async () => {
     try {
-        const email = document.querySelector('#email').value
-        const password = document.querySelector('#password').value
-        console.log(email, password)
-        console.log('API URL:', URL); // เพิ่มบรรทัดนี้เพื่อดูว่า URL ถูกต้องไหม
+        const emailInput = document.querySelector('#email')
+        const passwordInpu = document.querySelector('#password')
+
+        const email = emailInput.value
+        const password = passwordInpu.value
 
         const response = await axios.post(`${URL}/login`, {
             email: email,
             password: password
         })
+        localStorage.setItem("token", response.data.access_token)
         console.log("login Successfulss", response)
+
+        emailInput.value = ""
+        passwordInpu.value = ""
+        
     } catch (error) {
         console.log("login Error", error)
     }

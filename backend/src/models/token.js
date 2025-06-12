@@ -9,6 +9,15 @@ class refreshToken {
             throw error
         }
     }
+    static async revokeTokensByUser(userid) {
+        try{
+            const conn = getDB()
+            const [results] = await conn.query('UPDATE refresh_tokens SET is_revoked = ? WHERE users_id = ?', [true, userid])
+            return results
+        } catch(error){
+            throw error
+        }
+    }
 }
 
 module.exports = refreshToken
