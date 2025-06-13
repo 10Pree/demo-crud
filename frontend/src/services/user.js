@@ -1,6 +1,11 @@
 import axios from 'axios';
-
+import { checkPermission } from '../middlewares/auth';
+import { Auth } from '../middlewares/auth';
 const URL = import.meta.env.VITE_URL_API;
+
+if(!Auth('/login.html')){
+    throw new Error("Not authenticated")
+}
 
 const createUser = async () => {
     try {

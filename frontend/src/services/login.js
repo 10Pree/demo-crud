@@ -1,5 +1,10 @@
 import axios from 'axios';
+import { isLoggedIn } from '../middlewares/auth';
 const URL = import.meta.env.VITE_URL_API;
+
+if(isLoggedIn()){
+    window.location.href = '/index.html'
+}
 
 const login = async () => {
     try {
@@ -14,10 +19,11 @@ const login = async () => {
             password: password
         })
         localStorage.setItem("token", response.data.access_token)
-        console.log("login Successfulss", response)
+        // console.log("login Successfulss", response)
 
         emailInput.value = ""
         passwordInpu.value = ""
+        window.location.href = '/index.html'
         
     } catch (error) {
         console.log("login Error", error)

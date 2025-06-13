@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="../css/style.css" rel="stylesheet">
+  <link href="../src/css/style.css" rel="stylesheet">
   <title>Login</title>
 </head>
 
@@ -37,44 +37,5 @@
     </form>
   </div>
 </body>
-<script src="../services/login.js" type="module"></script>
-<script>
-//   const login = async () => {
-//     try {
-//       const email = document.getElementById("email").value;
-//       const password = document.getElementById("password").value;
-//       const response = await axios.post("http://localhost:8000/api/login", {
-//         email,
-//         password,
-//       },{
-//         withCredentials: true
-//       });
-//       // localStorage.setItem("token", response.data.token);
-//       console.log(response.data);
-//     } catch (error) {
-//       if (error.response) {
-//         console.log(error.response);
-//       } else {
-//         console.log(error);
-//       }
-//     }
-//   };
-
-//   const getUser = async () => {
-//     try {
-//       // const authtoken = localStorage.getItem("token");
-//       const response = await axios.get("http://localhost:8000/api/users", {
-//         withCredentials: true
-//       });
-//       console.log(response.data);
-//     } catch (error) {
-//       if (error.response) {
-//         console.log(error.response);
-//       } else {
-//         console.log(error);
-//       }
-//     }
-//   };
-</script>
-
+<script src="../src/services/login.js" type="module"></script>
 </html>
