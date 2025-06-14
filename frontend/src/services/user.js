@@ -3,9 +3,9 @@ import { checkPermission } from '../middlewares/auth';
 import { Auth } from '../middlewares/auth';
 const URL = import.meta.env.VITE_URL_API;
 
-if(!Auth('/login.html')){
-    throw new Error("Not authenticated")
-}
+// if(!Auth('/login.html')){
+//     throw new Error("Not authenticated")
+// }
 
 const createUser = async () => {
     try {
@@ -54,7 +54,9 @@ const createUser = async () => {
 const readUsers = async () => {
     try {
         // API
-        const response = await axios.get(`${URL}/users`);
+        const response = await axios.get(`${URL}/users`,{
+            withCredentials: true
+        });
         // ส่งข้อมูลไป แสดง Table
         populateTable(response.data.Userdata)
     } catch (error) {
@@ -66,29 +68,29 @@ const readUsers = async () => {
     }
 };
 
-const readuser = async (id) => {
+const readuser = async (event) => {
     try {
         // นำ id มา จาก data-user-id จาก button
-        const userId = id.target.dataset.userId
+        const userId = event.target.dataset.userId
         // value ข้อมูลจาก Form
         const username = document.querySelector('#update-username')
-        // const password = document.querySelector('#update-password')
         const email = document.querySelector('#update-email')
         const phone = document.querySelector('#update-phone')
         const address = document.querySelector('#update-address')
         const button = document.querySelector('#btn-update-user')
 
         // API
-        const response = await axios.get(`${URL}/user/${userId}`)
+        const response = await axios.get(`${URL}/user/${userId}`,{
+            withCredentials: true
+        })
         console.log(response.data.Userdata)
         const DataUser = response.data.Userdata[0]
         username.value = DataUser.username
-        // password.value = DataUser.password
         email.value = DataUser.email
         phone.value = DataUser.phone
         address.value = DataUser.address
         button.dataset.userId = DataUser.id
-        // console.log(button.dataset.userId)
+
     } catch (error) {
         if (error.response) {
             console.log(error.response)

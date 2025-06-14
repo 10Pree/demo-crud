@@ -6,8 +6,10 @@ require('dotenv').config();
 const checkPermission = (requestPermission) => { 
        return async(req, res, next) => {
     try {
-        const authHeaders = req.headers['authorization']
-        const token = authHeaders && authHeaders.split(" ")[1]
+        const token = req.cookies.access_token
+        // const token = authHeaders && authHeaders.split(" ")[1]
+        console.log(token)
+
         if (!token){
             return res.status(401).json({
                 message: "No access rights"
@@ -42,7 +44,8 @@ const getPermission = async(userId, requestPermission) => {
         JOIN roles r on ur.roles_id = r.id
         JOIN role_permissions rp on r.id = rp.roles_id
         JOIN permissions p on rp.permissions_id = p.id
-        WHERE u.id = ? and p.name = ?
+        WHERE u.id = ? and p.name = ? 
+        LIMIT 1
         `;
         const conn = getDB()
         const [results] = await conn.query(queryText,[userId, requestPermission])

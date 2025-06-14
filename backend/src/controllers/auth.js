@@ -41,9 +41,21 @@ class authController {
                     message: "error Token"
                 })
             }
+            res.cookie('refresh_token', refresh_token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',     
+                maxAge: 30 * 24 * 60 * 60 * 1000,  // 30 วัน
+            })
+            res.cookie('access_token', access_token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',       
+                maxAge: 15 * 60 * 1000   // 15 นาที,  // 15 นาที
+            })
+            console.log(req.cookies)
             res.status(200).json({
                 message: "Login Successful",
-                access_token
             })
         } catch (error) {
             res.status(500).json({
