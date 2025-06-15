@@ -54,6 +54,10 @@ const createUser = async () => {
 const readUsers = async () => {
     try {
         // API
+        await checkPermission()
+        if(!checkPermission){
+            return
+        }
         const response = await axios.get(`${URL}/users`,{
             withCredentials: true
         });
@@ -71,6 +75,7 @@ const readUsers = async () => {
 const readuser = async (event) => {
     try {
         // นำ id มา จาก data-user-id จาก button
+        console.log(document.cookie)
         const userId = event.target.dataset.userId
         // value ข้อมูลจาก Form
         const username = document.querySelector('#update-username')
@@ -156,10 +161,6 @@ const deleteUser = async (id) => {
         }
     }
 }
-
-
-
-
 
 
 const populateTable = (users) => {

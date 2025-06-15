@@ -5,5 +5,6 @@ const router = express.Router();
 router.use(express.json())
 
 router.post('/login', auth.login)
+router.get('/check', auth.checkToken)
 
 module.exports = router 
