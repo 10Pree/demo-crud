@@ -1,12 +1,13 @@
 import axios from "axios"
 const URL = import.meta.env.VITE_URL_API;
 // เช็ค สิทธิ ในการเข้าใช้
-export const checkPermission = async () => {
+export const checkToken = async () => {
     try {
-        const checkToken = await axios.get(`${URL}/check`, {
+        const res = await axios.get(`${URL}/check`, {
             withCredentials: true
         })
-        if (checkToken.status === 200) {
+        if (res.status === 200) {
+            isLoggedIn(true)
             return true
         }
         return false
@@ -20,9 +21,9 @@ export const checkPermission = async () => {
     }
 }
 
-// เช็คว่ามร token 
-export const isLoggedIn = () => {
-    return Boolean(localStorage.getItem('token'))
+
+export const isLoggedIn = (event) => {
+    return Boolean(event)
 }
 
 // เช็คว่ามีการ login หรือ ป่าวในการเช็ค จาก token 

@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { checkPermission } from '../middlewares/auth';
-import { Auth } from '../middlewares/auth';
+import { checkToken } from '../middlewares/auth';
 const URL = import.meta.env.VITE_URL_API;
 
 // if(!Auth('/login.html')){
@@ -54,8 +53,8 @@ const createUser = async () => {
 const readUsers = async () => {
     try {
         // API
-        await checkPermission()
-        if(!checkPermission){
+        await checkToken()
+        if(!checkToken()){
             return
         }
         const response = await axios.get(`${URL}/users`,{
@@ -75,7 +74,6 @@ const readUsers = async () => {
 const readuser = async (event) => {
     try {
         // นำ id มา จาก data-user-id จาก button
-        console.log(document.cookie)
         const userId = event.target.dataset.userId
         // value ข้อมูลจาก Form
         const username = document.querySelector('#update-username')
