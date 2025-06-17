@@ -53,7 +53,7 @@ class authController {
                 httpOnly: true,
                 secure: true,
                 sameSite: 'strict',
-                maxAge: 15 * 60 * 1000   // 15 นาที
+                maxAge: 30 * 24 * 60 * 60 * 1000   // 15 นาที
             })
             console.log(req.cookies)
             res.status(200).json({
