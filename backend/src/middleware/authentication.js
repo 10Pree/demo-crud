@@ -49,7 +49,7 @@ const getPermission = async(userId, requestPermission) => {
         `;
         const conn = getDB()
         const [results] = await conn.query(queryText,[userId, requestPermission])
-        console.log([results])
+        // console.log([results])
         return results.length > 0
     } catch(error) {
         console.log(error)

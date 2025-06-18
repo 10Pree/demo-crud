@@ -13,6 +13,7 @@ document.addEventListener('click', (event) => {
 document.addEventListener('click', (event) => {
     if (event.target.classList.contains('popup-open-update')) {
         readuser(event)
+        
     }
 })
 

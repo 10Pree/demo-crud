@@ -45,19 +45,47 @@ class authController {
             }
             res.cookie('refresh_token', refresh_token, {
                 httpOnly: true,
-                secure: true,
-                sameSite: 'strict',
-                maxAge:  60 * 1000,  // 30 วัน
+                secure: false,
+                sameSite: 'lax',
+                maxAge: 30 * 24 * 60 * 60 * 1000,  // 30 วัน
+                path: '/'   
             })
             res.cookie('access_token', access_token, {
                 httpOnly: true,
-                secure: true,
-                sameSite: 'strict',
-                maxAge: 30 * 24 * 60 * 60 * 1000   // 15 นาที
+                secure: false,
+                sameSite: 'lax',
+                maxAge: 15 * 60 * 1000,// 15 นาที
+                path: '/'    
             })
-            console.log(req.cookies)
+            // console.log(req.cookies)
             res.status(200).json({
                 message: "Login Successful",
+            })
+        } catch (error) {
+            res.status(500).json({
+                message: "Internal Server Error"
+            })
+        }
+    }
+
+    static async logout(req, res) {
+        try {
+                        console.log("Headers cookie:", req.headers.cookie)
+            console.log("Cookies before logout:", req.cookies)
+            res.clearCookie('refresh_token', {
+                httpOnly: true,
+                secure: false,
+                sameSite: 'lax',
+                path: '/' 
+            })
+            res.clearCookie('access_token', {
+                httpOnly: true,
+                secure: false,
+                sameSite: 'lax',
+                path: '/' 
+            })
+            res.status(200).json({
+                message: "Logout Successful"
             })
         } catch (error) {
             res.status(500).json({
@@ -75,13 +103,13 @@ class authController {
                     message: "Not token"
                 })
             }
-            const exp =  jwt.verify(access_token, process.env.ACCESS_TOKEN_SECRET)
+            const exp = jwt.verify(access_token, process.env.ACCESS_TOKEN_SECRET)
 
             res.status(200).json({
                 message: "Authenticated"
             })
         } catch (error) {
-            if(error.name === 'TokenExpiredError'){
+            if (error.name === 'TokenExpiredError') {
                 return authController.checkRefresh(req, res)
             }
             res.status(403).json({
@@ -99,11 +127,11 @@ class authController {
             }
             const checkRefresh = await jwt.verify(refresh_token, process.env.REFRESH_TOKEN_SECRET)
 
-            const newAccess = createAccessToken(checkRefresh.id, checkRefresh.email)
+            const newAccess = await createAccessToken(checkRefresh.id, checkRefresh.email)
             res.cookie('access_token', newAccess, {
                 httpOnly: true,
-                secure: true,
-                sameSite: 'strict',
+                secure: false,
+                sameSite: 'lax',
                 maxAge: 15 * 60 * 1000   // 15 นาที
             })
             res.status(200).json({

@@ -1,9 +1,5 @@
 import axios from 'axios';
-import { isLoggedIn } from '../middlewares/auth';
 const URL = import.meta.env.VITE_URL_API;
-// if(isLoggedIn()){
-//     window.location.href = '/index.html'
-// }
 
 const login = async () => {
     try {
@@ -26,5 +22,6 @@ const login = async () => {
         console.log("login Error", error)
     }
 }
+
 
 document.querySelector('#btn-login').addEventListener('click', login)
