@@ -7,8 +7,6 @@ const checkPermission = (requestPermission) => {
        return async(req, res, next) => {
     try {
         const token = req.cookies.access_token
-        // const token = authHeaders && authHeaders.split(" ")[1]
-        // console.log(token)
 
         if (!token){
             return res.status(401).json({

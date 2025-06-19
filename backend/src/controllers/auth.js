@@ -48,14 +48,14 @@ class authController {
                 secure: false,
                 sameSite: 'lax',
                 maxAge: 30 * 24 * 60 * 60 * 1000,  // 30 วัน
-                path: '/'   
+                path: '/'
             })
             res.cookie('access_token', access_token, {
                 httpOnly: true,
                 secure: false,
                 sameSite: 'lax',
                 maxAge: 15 * 60 * 1000,// 15 นาที
-                path: '/'    
+                path: '/'
             })
             // console.log(req.cookies)
             res.status(200).json({
@@ -70,24 +70,48 @@ class authController {
 
     static async logout(req, res) {
         try {
-                        console.log("Headers cookie:", req.headers.cookie)
-            console.log("Cookies before logout:", req.cookies)
+            const token = req.cookies.refresh_token
+            if (!token) {
+                return res.status(401).json({
+                    message: "Not Token"
+                })
+            }
+            const checkToken = await jwt.verify(token, process.env.REFRESH_TOKEN_SECRET)
+
+            await tokensModel.revokeTokensByUser(checkToken.id)
             res.clearCookie('refresh_token', {
                 httpOnly: true,
                 secure: false,
                 sameSite: 'lax',
-                path: '/' 
+                path: '/'
             })
             res.clearCookie('access_token', {
                 httpOnly: true,
                 secure: false,
                 sameSite: 'lax',
-                path: '/' 
+                path: '/'
             })
             res.status(200).json({
                 message: "Logout Successful"
             })
         } catch (error) {
+            if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
+                res.clearCookie('refresh_token', {
+                    httpOnly: true,
+                    secure: false,
+                    sameSite: 'lax',
+                    path: '/'
+                })
+                res.clearCookie('access_token', {
+                    httpOnly: true,
+                    secure: false,
+                    sameSite: 'lax',
+                    path: '/'
+                })
+                return res.status(200).json({
+                    message: "Logout Successful"
+                })
+            }
             res.status(500).json({
                 message: "Internal Server Error"
             })
@@ -97,20 +121,34 @@ class authController {
     static async checkAccess(req, res) {
         try {
             const access_token = req.cookies.access_token
-            console.log(access_token)
-            if (!access_token) {
+            const refresh_token = req.cookies.refresh_token
+            if (!access_token && !refresh_token) {
                 return res.status(401).json({
                     message: "Not token"
                 })
             }
-            const exp = jwt.verify(access_token, process.env.ACCESS_TOKEN_SECRET)
+            const checkAccessToken = await jwt.verify(access_token, process.env.ACCESS_TOKEN_SECRET)
+            const checkRefreshToken = await jwt.verify(refresh_token, process.env.REFRESH_TOKEN_SECRET)
 
             res.status(200).json({
                 message: "Authenticated"
             })
         } catch (error) {
-            if (error.name === 'TokenExpiredError') {
+            if (error.name === "TokenExpiredError") {
                 return authController.checkRefresh(req, res)
+            } else {
+                res.clearCookie('refresh_token', {
+                    httpOnly: true,
+                    secure: false,
+                    sameSite: 'lax',
+                    path: '/'
+                })
+                res.clearCookie('access_token', {
+                    httpOnly: true,
+                    secure: false,
+                    sameSite: 'lax',
+                    path: '/'
+                })
             }
             res.status(403).json({
                 message: "Invalid token"
@@ -145,5 +183,6 @@ class authController {
 
     }
 }
+
 
 module.exports = authController
