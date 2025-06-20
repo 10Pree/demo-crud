@@ -1,12 +1,12 @@
 const mysql = require("mysql2/promise")
-
+require('dotenv').config()
 let conn = null
 const connectMySql = async() => {
     conn = await mysql.createPool({
-        host: "localhost",
-        user: "root",
-        password: "root",
-        database: "practice-cred",
+        host: process.env.DB_HOST,
+        user: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DATABASE,
         // การใช้ Pool
         waitForConnections: true, //  ถ้าไม่มี connection ว่าง จะให้รอ (ไม่ล้มเหลวทันที)
         connectionLimit: 10,      //  จำนวนสูงสุดของ connection ที่จะเปิดพร้อมกันใน pool
