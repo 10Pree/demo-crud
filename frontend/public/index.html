@@ -9,8 +9,9 @@
     <title>CRUD</title>
 </head>
 
-<body class="p-10">
-    <div class="w-full text-end my-2">
+<body class="w-screen h-screen bg-amber-300">
+    <div class="w-full h-full">
+        <div class="text-end my-2">
         <i id="logout" class="fas fa-sign-out-alt cursor-pointer bg-gray-200 rounded-full p-3 hover:bg-gray-300 hover:text-white"></i>
     </div>
     <aside>
@@ -19,7 +20,7 @@
             <button class="bg-indigo-500 h-10 w-20 my-3 rounded-lg text-white uppercase font-bold" id="popup-open-add"
                 type="button">Add</button>
         </div>
-        <table class="w-full text-sm whitespace-normal border-1 ">
+        <table class="w-full h-full  text-sm whitespace-normal border-1 ">
             <thead class="text-left uppercase border-b-1">
                 <tr class="">
                     <th scope="col" class="px-6 py-3">Username</th>
@@ -32,6 +33,7 @@
             <tbody id="tableBody">
             </tbody>
         </table>
+    </div>
     </div>
 
     <!-- Modal Add User -->
