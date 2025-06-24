@@ -8,31 +8,27 @@
   <title>Login</title>
 </head>
 
-<body class="min-h-screen bg-gray-100 flex items-center justify-center">
-  <div class="max-w-md w-full bg-white p-8 border-none rounded-md shadow-lg m-4">
+<body class="min-h-screen flex items-center justify-center bg-cover" style="background-image: url('https://images.pexels.com/photos/807598/pexels-photo-807598.jpeg');">
+  <div class="max-w-md w-full p-10 border-none  m-4 bg-black/20 backdrop-blur-sm border border-white/50 rounded-xl shadow-[inset_0_1px_0px_rgba(255,255,255,0.75),0_0_9px_rgba(0,0,0,0.2),0_3px_8px_rgba(0,0,0,0.15)] text-white relative before:absolute before:inset-0 before:rounded-lg before:bg-gradient-to-br before:from-white/60 before:via-transparent before:to-transparent before:opacity-70 before:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:bg-gradient-to-tl after:from-white/30 after:via-transparent after:to-transparent after:opacity-50 after:pointer-events-none">
     <h1 class="text-center text-2xl mb-8">เข้าสู่ระบบ</h1>
     <form action="" class="space-y-4">
       <div class="flex flex-col gap-2">
         <label class="text-lg font-normal">E-mail</label>
         <input type="email" name="email" id="email"
-          class="p-2 text-lg font-medium bg-indigo-50 border-2 border-indigo-50 rounded-md focus:outline-indigo-500" autocomplete="new-email"/>
+          class="p-3 w-full text-white text-sm bg-black/20 border border-white/50 backdrop-blur-sm rounded-lg shadow-[inset_0_1px_0px_rgba(255,255,255,0.75),0_0_9px_rgba(0,0,0,0.2),0_3px_8px_rgba(0,0,0,0.15)] placeholder:text-white/70 focus:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-300 relative before:absolute before:inset-0 before:rounded-lg before:bg-gradient-to-br before:from-white/60 before:via-transparent before:to-transparent before:opacity-70 before:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:bg-gradient-to-tl after:from-white/30 after:via-transparent after:to-transparent after:opacity-50 after:pointer-events-none" autocomplete="new-email"/>
       </div>
       <div class="flex flex-col gap-2">
         <label class="text-lg font-normal">Password</label>
         <input type="password" id="password"
-          class="p-2 text-lg font-medium bg-indigo-50 border-2 border-indigo-50 rounded-md focus:outline-indigo-500" autocomplete="new-password" />
+          class="p-3 w-full text-white text-sm bg-black/20 border border-white/50 backdrop-blur-sm rounded-lg shadow-[inset_0_1px_0px_rgba(255,255,255,0.75),0_0_9px_rgba(0,0,0,0.2),0_3px_8px_rgba(0,0,0,0.15)] placeholder:text-white/70 focus:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-300 relative before:absolute before:inset-0 before:rounded-lg before:bg-gradient-to-br before:from-white/60 before:via-transparent before:to-transparent before:opacity-70 before:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:bg-gradient-to-tl after:from-white/30 after:via-transparent after:to-transparent after:opacity-50 after:pointer-events-none" autocomplete="new-password" />
       </div>
       <div class="flex justify-end gap-2">
         <input type="checkbox" />
         <span class="font-normal">จำรหัส</span>
       </div>
       <button id="btn-login"  type="button"
-        class="w-full font-normal bg-indigo-500 p-2 rounded-md text-white hover:bg-indigo-200 hover:text-indigo-500">
+        class="w-full inline-flex items-center justify-center align-middle select-none font-sans  text-center px-4 py-2 text-white text-sm font-medium rounded-lg bg-white/2.5 border border-white/50 backdrop-blur-sm shadow-[inset_0_1px_0px_rgba(255,255,255,0.75),0_0_9px_rgba(0,0,0,0.2),0_3px_8px_rgba(0,0,0,0.15)] hover:bg-white/30 transition-all duration-300 before:absolute before:inset-0 before:rounded-lg before:bg-gradient-to-br before:from-white/60 before:via-transparent before:to-transparent before:opacity-70 before:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:bg-gradient-to-tl after:from-white/30 after:via-transparent after:to-transparent after:opacity-50 after:pointer-events-none transition antialiased">
         เข้าสู่ระบบ
-      </button>
-      <button  type="button"
-        class="w-full font-normal bg-indigo-500 p-2 rounded-md text-white hover:bg-indigo-200 hover:text-indigo-500">
-        Get user
       </button>
     </form>
   </div>

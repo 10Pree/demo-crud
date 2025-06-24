@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { checkToken } from '../middlewares/auth';
 import { populateTable } from '../js/userTable'
+import Swal from 'sweetalert2'
 const URL = import.meta.env.VITE_URL_API;
 
 // if(!Auth('/login.html')){
@@ -49,11 +50,29 @@ const createUser = async () => {
         // รี เห็น ข้อมูลใหม่
         readUsers()
 
+        Swal.fire({
+            title: "เพิ่ม ผู้ใช้สำเร็จ",
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true
+        })
+
     } catch (error) {
-        if (error.response) {
-            console.log(error.response)
+        if (error.response && error.response.data) {
+            Swal.fire({
+                title: 'Error!',
+                text: error.response.data.message,
+                icon: 'error',
+                confirmButtonText: 'ตกลง'
+            })
         } else {
-            console.log(error)
+            Swal.fire({
+                title: 'Error!',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'ตกลง'
+            })
         }
     }
 }
@@ -72,9 +91,19 @@ const readUsers = async () => {
         populateTable(response.data.Userdata)
     } catch (error) {
         if (error.response) {
-            console.log(error.response)
+            Swal.fire({
+                title: 'Error!',
+                text: error.response.message,
+                icon: 'error',
+                confirmButtonText: 'ตกลง'
+            })
         } else {
-            console.log(error)
+            Swal.fire({
+                title: 'Error!',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'ตกลง'
+            })
         }
     }
 };
@@ -99,7 +128,7 @@ const readuser = async (event) => {
         const response = await axios.get(`${URL}/user/${userId}`, {
             withCredentials: true
         })
-        console.log(response.data.Userdata)
+        // console.log(response.data.Userdata)
         const DataUser = response.data.Userdata[0]
         username.value = DataUser.username
         email.value = DataUser.email
@@ -109,9 +138,19 @@ const readuser = async (event) => {
 
     } catch (error) {
         if (error.response) {
-            console.log(error.response)
+            Swal.fire({
+                title: 'Error!',
+                text: error.response.data.message,
+                icon: 'error',
+                confirmButtonText: 'ตกลง'
+            })
         } else {
-            console.log(error)
+            Swal.fire({
+                title: 'Error!',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'ตกลง'
+            })
         }
     }
 
@@ -148,13 +187,31 @@ const updateUser = async (id) => {
         // ปิด Popup
         PopupModal.classList.remove('block')
         PopupModal.classList.add('hidden')
+
+        Swal.fire({
+            title: "อัปเดต สำเร็จ",
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true
+        })
         // รี แสดง ข้อมูล ใหม่
         readUsers()
     } catch (error) {
         if (error.response) {
-            console.log(error.response)
+            Swal.fire({
+                title: 'Error!',
+                text: error.response.data.message,
+                icon: 'error',
+                confirmButtonText: 'ตกลง'
+            })
         } else {
-            console.log(error)
+            Swal.fire({
+                title: 'Error!',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'ตกลง'
+            })
         }
     }
 }
@@ -169,20 +226,47 @@ const deleteUser = async (id) => {
         // นำ id มา จาก data-user-id จาก button
         const userID = id.target.dataset.userId
 
-        if (confirm("จะลบผู้ใช้งานหรือไม")) {
-            // API
-            const response = await axios.delete(`${URL}/user/${userID}`, {
-                withCredentials: true
-            })
-            // console.log(response.data.resutls)
-            // รี แสดง ข้อมูล ใหม่
-            readUsers()
+        const results = await Swal.fire({
+            title: `ต้องการลบผู้ใช้ ${userID} หรือไม่`,
+            icon: 'warning',
+            confirmButtonText: 'ตกลง',
+            cancelButtonText: 'ยกเลิก',
+            showCancelButton: true
+        })
+
+        if (!results.isConfirmed) {
+            return
         }
+
+        // API
+        const response = await axios.delete(`${URL}/user/${userID}`, {
+            withCredentials: true
+        })
+        // console.log(response.data.resutls)
+        // รี แสดง ข้อมูล ใหม่
+        readUsers()
+
+        Swal.fire({
+            title: 'ลบ ผู้ใช้งานสำเร็จ',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true
+        })
     } catch (error) {
         if (error.response) {
-            console.log(error.response)
+            Swal.fire({
+                title: 'Error!',
+                text: error.response.data.message,
+                icon: 'error',
+                confirmButtonText: 'ตกลง'
+            })
         } else {
-            console.log(error)
+            Swal.fire({
+                title: 'Error!',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'ตกลง'
+            })
         }
     }
 }
