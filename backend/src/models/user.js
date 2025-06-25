@@ -51,6 +51,15 @@ class Usermodels {
             throw error
         }
     }
+    static async deleteRights(userid) {
+        try {
+            const conn = getDB()
+            const [results] = await conn.query('DELETE FROM user_roles WHERE users_id = ?', userid)
+            return results
+        } catch (error) {
+            throw error
+        }
+    }
 }
 
 

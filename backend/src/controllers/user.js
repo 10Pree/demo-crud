@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const Usermodels = require('../models/user')
+const Tokenmodels = require('../models/token')
 const { hashPassword } = require('../services/auth')
 
 class UserController {
@@ -76,12 +77,19 @@ class UserController {
                     message: "Missing user id"
                 })
             }
+            // check User
             const checkUser = await Usermodels.getUserID(userId)
             if (checkUser.length === 0) {
                 return res.status(404).json({
                     message: "User not found"
                 })
             }
+            //ลบ Token
+            await Tokenmodels.deleteToken(userId)
+            // ลบ สิทธิของ User
+            await Usermodels.deleteRights(userId)
+
+            // delete user
             const deleteuser = await Usermodels.deleteUserID(userId)
             if (!deleteuser) {
                 return res.status(404).json({
@@ -95,7 +103,7 @@ class UserController {
         } catch (error) {
             console.error(error)
             res.status(500).json({
-                message: "Internal Server Error"
+                message: "Internal Server Error",
             })
         }
     }
