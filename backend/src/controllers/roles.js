@@ -4,7 +4,7 @@ const Rolesmodels = require('../models/roles')
 class rolesControllers {
     static async AddRole(req, res) {
         try{
-        const {userId, roleId} = req.body
+        const {userId, roleId = 3} = req.body
 
         if(!userId || !roleId){
             return res.status(400).json({
