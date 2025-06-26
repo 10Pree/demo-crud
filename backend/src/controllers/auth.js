@@ -3,6 +3,7 @@ const Usersmodels = require('../models/user')
 const tokensModel = require('../models/token')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
+
 class authController {
     static async login(req, res) {
         try {

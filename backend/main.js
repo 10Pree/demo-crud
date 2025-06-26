@@ -1,6 +1,7 @@
 const express = require('express')
-const user = require('./src/routers/user')
+const users = require('./src/routers/user')
 const auth = require('./src/routers/auth')
+const roles = require('./src/routers/roles') 
 const { connectMySql } = require("./src/config/database")
 const cors = require("cors")
 const cookieParser = require('cookie-parser')
@@ -13,8 +14,9 @@ app.use(cors({
     credentials: true
 }))
 
-app.use('/', user)
+app.use('/', users)
 app.use('/', auth)
+app.use('/', roles)
 
 const port = 8000
 const startServer = async() => {    
