@@ -2,6 +2,8 @@ const { comParePassword, createAccessToken, createRefreshToken } = require('../s
 const Usersmodels = require('../models/user')
 const tokensModel = require('../models/token')
 const jwt = require('jsonwebtoken')
+const passport = require('passport')
+
 require('dotenv').config()
 
 class authController {
