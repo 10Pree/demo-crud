@@ -37,4 +37,8 @@ router.get('/auth/google/callback',
     }
 )
 
+router.get('/auth/facebook',
+  passport.authenticate('facebook')
+);
+
 module.exports = router 
